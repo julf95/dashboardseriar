@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard SR Ar Raudhah</title>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root {
+  --purple: #a78bfa;
+  --pink: #f0abfc;
+  --text: #f8f7ff;
+  --muted: #c4bddb;
+  --glass: rgba(255,255,255,.075);
+  --border: rgba(255,255,255,.13);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 0%, #6424a5 0%, transparent 42%),
+    radial-gradient(ellipse at 90% 20%, #4625a0 0%, transparent 38%),
+    radial-gradient(ellipse at 50% 100%, #30145e 0%, transparent 45%),
+    linear-gradient(135deg, #10091f, #1a1034 55%, #10091f);
+  overflow-x: hidden;
+}
+
+button { font: inherit; }
+
+.page {
+  width: min(1500px, 100%);
+  margin: auto;
+  padding: 28px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  font-size: 29px;
+  background: linear-gradient(135deg, #c084fc, #7c3aed 60%, #4f46e5);
+  box-shadow: 0 0 35px #a855f744;
+}
+
+.eyebrow {
+  color: #d8b4fe;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 7px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 38px);
+  letter-spacing: -.8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 7px;
+}
+
+.clockbox {
+  text-align: right;
+  padding: 13px 18px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  backdrop-filter: blur(15px);
+}
+
+.clock {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.date {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 25px 0 15px;
+}
+
+.section-heading h2 {
+  font-size: 16px;
+  margin: 0;
+  letter-spacing: .3px;
+}
+
+.section-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 5px 0 0;
+}
+
+.live {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #86efac;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  background: #86efac;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #86efac;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  min-height: 240px;
+  padding: 23px;
+  border-radius: 23px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 15px 40px #00000017;
+  transition: border-color .3s, transform .3s;
+}
+
+.card:hover {
+  border-color: #c4b5fd77;
+  transform: translateY(-2px);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  right: -65px;
+  top: -75px;
+  border-radius: 50%;
+  background: var(--glow, #a855f7);
+  opacity: .14;
+  filter: blur(35px);
+  pointer-events: none;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.iconbox {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--iconbg, #8b5cf633);
+  color: var(--accent, #c4b5fd);
+}
+
+.iconbox svg { width: 21px; height: 21px; }
+
+.card-title {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.card-subtitle {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+.slide-content {
+  min-height: 94px;
+  animation: fadeIn .45s ease;
+}
+
+.slide-label {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent, #c4b5fd);
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.slide-title {
+  font-size: clamp(19px, 2vw, 25px);
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 9px;
+}
+
+.slide-description {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #ddd6ef;
+}
+
+.slide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  gap: 10px;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dots span {
+  width: 6px;
+  height: 6px;
+  background: #ffffff35;
+  border-radius: 20px;
+  transition: all .3s;
+}
+
+.dots span.active {
+  width: 20px;
+  background: var(--accent, #c4b5fd);
+}
+
+.small-label {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.ranking-list {
+  display: grid;
+  gap: 13px;
+}
+
+.rank-row {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.rank-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: #ffffff0c;
+  color: #d8b4fe;
+  font-weight: 800;
+}
+
+.rank-row:first-child .rank-number {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  color: #271200;
+}
+
+.rank-name { font-weight: 650; }
+
+.rank-points {
+  color: #d8b4fe;
+  font-weight: 800;
+}
+
+.bar {
+  height: 4px;
+  border-radius: 10px;
+  background: #ffffff13;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #8b5cf6, #e879f9);
+}
+
+.discipline-list {
+  display: grid;
+  gap: 15px;
+}
+
+.discipline-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 12px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.discipline-item strong {
+  font-size: 16px;
+  color: #f0abfc;
+}
+
+.discipline-item .bar { grid-column: 1 / -1; }
+
+.hadith-arabic {
+  font-family: "Traditional Arabic", "Times New Roman", serif;
+  font-size: clamp(21px, 2.5vw, 29px);
+  text-align: right;
+  direction: rtl;
+  line-height: 1.9;
+  margin: 3px 0 13px;
+  color: #f5d0fe;
+}
+
+.hadith-translation {
+  color: #eee6fa;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.hadith-ref {
+  margin-top: 13px;
+  color: #d8b4fe;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.media-section {
+  margin-top: 26px;
+  padding: 23px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #ffffff0c, #a855f70d);
+  border: 1px solid var(--border);
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.media-btn {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+  padding: 17px;
+  min-width: 0;
+  border-radius: 17px;
+  border: 1px solid #ffffff18;
+  background: #ffffff08;
+  transition: all .25s;
+}
+
+.media-btn:hover {
+  background: #a855f729;
+  border-color: #c084fc88;
+  transform: translateY(-2px);
+}
+
+.media-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #a855f744, #6366f144);
+  color: #e9d5ff;
+}
+
+.media-icon svg { width: 21px; }
+
+.media-name {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.media-desc {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.open-icon {
+  margin-left: auto;
+  color: #c4b5fd;
+  flex-shrink: 0;
+}
+
+.footer {
+  padding: 22px 0 5px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #b9aecd;
+  font-size: 10px;
+  letter-spacing: .5px;
+}
+
+/* FULL-SCREEN MEDIA VIEWER */
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  background: #10091f;
+  animation: fadeIn .25s ease;
+}
+
+.viewer.show { display: flex; }
+
+.viewer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 22px;
+  background: #1b1031;
+  border-bottom: 1px solid var(--border);
+}
+
+.viewer-heading {
+  font-weight: 750;
+  font-size: 15px;
+}
+
+.viewer-hint {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 15px;
+  color: white;
+  background: #8b5cf633;
+  border: 1px solid #c4b5fd44;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.close-btn:hover { background: #8b5cf655; }
+
+.viewer-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  overflow: auto;
+}
+
+.viewer-body iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.viewer-body video {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.viewer-body audio { width: min(700px, 100%); }
+
+.media-fallback {
+  text-align: center;
+  max-width: 500px;
+  line-height: 1.8;
+  color: #ddd6ef;
+}
+
+.media-fallback a { color: #d8b4fe; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 1200px) {
+  .page { padding: 35px 42px; }
+  .card { min-height: 250px; padding: 26px; }
+}
+
+@media (max-width: 700px) {
+  .page { padding: 17px; }
+  .topbar { align-items: flex-start; }
+  .logo { width: 48px; height: 48px; border-radius: 15px; }
+  .brand { gap: 11px; }
+  .clockbox { padding: 10px; }
+  .clock { font-size: 19px; }
+  .date { font-size: 9px; }
+  .grid { grid-template-columns: 1fr; }
+  .card { min-height: 220px; }
+  .media-grid { grid-template-columns: 1fr; }
+  .media-section { padding: 16px; }
+  .footer { flex-direction: column; }
+}
+
+@media (max-width: 390px) {
+  .subtitle { font-size: 11px; }
+  .clockbox { display: none; }
+  .slide-title { font-size: 20px; }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><i data-lucide="graduation-cap"></i></div>
+      <div>
+        <div class="eyebrow">PAPARAN MAKLUMAT SEKOLAH</div>
+        <h1>Dashboard <span style="color:#d8b4fe">SR Ar Raudhah</span></h1>
+        <div class="subtitle">Membina Generasi Berilmu, Beradab dan Berakhlak</div>
+      </div>
+    </div>
+
+    <div class="clockbox">
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="date" id="date"></div>
+    </div>
+  </header>
+
+  <div class="section-heading">
+    <div>
+      <h2>Maklumat Sekolah</h2>
+      <p>Info bertukar secara automatik</p>
+    </div>
+    <div class="live"><span class="dot"></span> PAPARAN AKTIF</div>
+  </div>
+
+  <main class="grid">
+
+    <!-- PESANAN GURU -->
+    <section class="card"
+      style="--accent:#c4b5fd;--glow:#a855f7;--iconbg:#8b5cf633">
+      <div class="card-head">
+        <div class="iconbox"><i data-lucide="message-circle"></i></div>
+        <div>
+          <div class="card-title">Pesanan Guru Minggu Ini</div>
+          <div class="card-subtitle">Peringatan untuk warga sekolah</div>
+        </div>
+      </div>
+      <div id="messageSlide" class="slide-content"></div>
+      <div class="slide-footer">
+        <div class="dots" id="messageDots"></div>
+        <span class="small-label">PESANAN MINGGUAN</span>
+      </div>
+    </section>
+
+    <!-- RANKING KELAS -->
+    <section class="card"
+      style="--accent:#fcd34d;--glow:#f59e0b;--iconbg:#f59e0b22">
+      <div class="card-head">
+        <div class="iconbox" style="color:#fcd34d;background:#f59e0b22">
+          <i data-lucide="trophy"></i>
+        </div>
+        <div>
+          <div class="card-title">Ranking Kelas Terbaik</div>
+          <div class="card-subtitle">Contoh skor kebersihan dan disiplin</div>
+        </div>
+      </div>
+      <div class="ranking-list" id="rankingList"></div>
+      <div class="slide-footer">
+        <span class="small-label">CONTOH DATA · BOLEH DIUBAH</span>
+        <span class="small-label">TOP 3</span>
+      </div>
+    </section>
+
+    <!-- DISIPLIN -->
+    <section class="card"
+      style="--accent:#f0abfc;--glow:#d946ef;--iconbg:#d946ef22">
+      <div class="card-head">
+        <div class="iconbox" style="color:#f0abfc;background:#d946ef22">
+          <i data-lucide="clipboard-list"></i>
+        </div>
+        <div>
+          <div class="card-title">Rekod Disiplin</div>
+          <div class="card-subtitle">Jumlah rekod mengikut jenis</div>
+        </div>
+      </div>
+      <div id="disciplineList" class="discipline-list"></div>
+      <div class="slide-footer">
+        <span class="small-label">CONTOH DATA SAHAJA</span>
+        <span class="small-label" id="totalDiscipline"></span>
+      </div>
+    </section>
+
+    <!-- HADIS -->
+    <section class="card"
+      style="--accent:#86efac;--glow:#10b981;--iconbg:#10b98122">
+      <div class="card-head">
+        <div class="iconbox" style="color:#86efac;background:#10b98122">
+          <i data-lucide="book-open"></i>
+        </div>
+        <div>
+          <div class="card-title">Petikan Hadis</div>
+          <div class="card-subtitle">Menghayati ilmu dan akhlak</div>
+        </div>
+      </div>
+      <div id="hadithSlide" class="slide-content"></div>
+      <div class="slide-footer">
+        <div class="dots" id="hadithDots"></div>
+        <span class="small-label">PENGISIAN ROHANI</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MEDIA BUTTONS -->
+  <section class="media-section">
+    <div class="section-heading" style="margin-top:0">
+      <div>
+        <h2>Bahan Paparan Sekolah</h2>
+        <p>Klik untuk paparkan bahan pada skrin ini</p>
+      </div>
+      <i data-lucide="monitor-play" style="color:#d8b4fe"></i>
+    </div>
+
+    <div class="media-grid">
+      <button class="media-btn" onclick="openMedia('mathurat')">
+        <span class="media-icon"><i data-lucide="book-open"></i></span>
+        <span>
+          <div class="media-name">Slide Al-Mathurat</div>
+          <div class="media-desc">Doa dan zikir harian</div>
+        </span>
+        <i class="open-icon" data-lucide="chevron-right"></i>
+      </button>
+      
+      
+        <button class="media-btn" onclick="openMedia('asmaulHusna')">
+          <span class="media-icon"><i data-lucide="music"></i></span>
+          <span>
+            <div class="media-name">Alunan Asmaul Husna</div>
+            <div class="media-desc">99 nama Allah</div>
+          </span>
+          <i class="open-icon" data-lucide="chevron-right"></i>
+        </button>
+
+
+      <button class="media-btn" onclick="openMedia('nationalSong')">
+        <span class="media-icon"><i data-lucide="flag"></i></span>
+        <span>
+          <div class="media-name">Lagu Negaraku & Sabah Tanah Airku</div>
+          <div class="media-desc">Lagu kebangsaan Malaysia</div>
+        </span>
+        <i class="open-icon" data-lucide="chevron-right"></i>
+      </button>
+      
+      <button class="media-btn" onclick="openMedia('schoolSong')">
+        <span class="media-icon"><i data-lucide="music"></i></span>
+        <span>
+          <div class="media-name">Lagu Sekolah</div>
+          <div class="media-desc">Lagu rasmi SR Ar Raudhah</div>
+        </span>
+        <i class="open-icon" data-lucide="chevron-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>© SR AR RAUDHAH · DASHBOARD SEKOLAH</span>
+    <span>BERILMU · BERADAB · BERAMAL</span>
+  </footer>
+</div>
+
+<!-- EMBEDDED VIEWER: SAME PAGE, NO NEW TAB -->
+<div class="viewer" id="viewer">
+  <div class="viewer-top">
+    <div>
+      <div class="viewer-heading" id="viewerTitle">Paparan Bahan</div>
+      <div class="viewer-hint">Tekan Kembali ke Dashboard untuk keluar</div>
+    </div>
+    <button class="close-btn" onclick="closeMedia()">
+      <i data-lucide="arrow-left"></i>
+      Kembali ke Dashboard
+    </button>
+  </div>
+  <div class="viewer-body" id="viewerBody"></div>
+</div>
+
+<script>
+// ==================================================
+// 1. SAMPLE DATA — EDIT THESE VALUES TO TEST
+// ==================================================
+
+const messages = [
+  {
+    label: "PESANAN 01",
+    title: "Mulakan hari dengan Bismillah",
+    description: "Niatkan setiap usaha untuk mencari ilmu dan mendapat keredaan Allah."
+  },
+  {
+    label: "PESANAN 02",
+    title: "Adab mendahului ilmu",
+    description: "Hormati guru, sayangi rakan dan jagalah tutur kata di mana sahaja."
+  },
+  {
+    label: "PESANAN 03",
+    title: "Jaga kebersihan sekolah",
+    description: "Buang sampah ke dalam tong dan pastikan kelas sentiasa kemas."
+  },
+  {
+    label: "PESANAN 04",
+    title: "Solat tanggungjawab kita",
+    description: "Jaga solat pada waktunya dan jadikan al-Quran teman kehidupan."
+  }
+];
+
+const rankings = [
+  { name: "Tahun 6 Bestari", score: 96 },
+  { name: "Tahun 5 Bestari", score: 91 },
+  { name: "Tahun 4 Bestari", score: 87 }
+];
+
+// Contoh sahaja. Tukar kepada jumlah sebenar apabila bersedia.
+const discipline = [
+  { name: "Tidak mematuhi arahan", count: 8 },
+  { name: "Tidak sopan", count: 5 },
+  { name: "Tidak menjaga kebersihan", count: 4 },
+  { name: "Mengganggu rakan", count: 3 }
+];
+
+// Pastikan petikan dan rujukan disemak sebelum paparan rasmi.
+const hadiths = [
+  {
+    arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ",
+    translation: "Sesungguhnya setiap amalan bergantung pada niat.",
+    reference: "Riwayat al-Bukhari dan Muslim · Hadis 1"
+  },
+  {
+    arabic: "مَنْ لَا يَرْحَمْ لَا يُرْحَمْ",
+    translation: "Sesiapa yang tidak mengasihi, dia tidak akan dikasihi.",
+    reference: "Riwayat al-Bukhari dan Muslim"
+  },
+  {
+    arabic: "الطُّهُورُ شَطْرُ الْإِيمَانِ",
+    translation: "Bersuci itu sebahagian daripada iman.",
+    reference: "Riwayat Muslim · Hadis 223"
+  }
+];
+
+// ==================================================
+// 2. MEDIA SETTINGS
+// Replace the empty URLs with your own media URLs.
+// No Google Sheet is required.
+// ==================================================
+
+const mediaFiles = {
+  mathurat: {
+    title: "Slide Al-Mathurat",
+    type: "pdf",
+    url: "https://docs.google.com/presentation/d/1AWkFgxQ5UCFmvCHx3tegVC7oImHk3GFv/embed?start=false&loop=false" // Example: https://your-site.com/mathurat.pdf
+  },
+  
+  
+    asmaulHusna: {
+      title: "Alunan Asmaul Husna",
+      type: "youtube",
+      url: "https://www.youtube.com/embed/2-Bqep-5B8s?autoplay=1&rel=0"
+    },
+
+  schoolSong: {
+      title: "Lagu Sekolah",
+      type: "youtube",
+      url: "https://www.youtube.com/embed/NbGuDswTU5I?autoplay=1&rel=0"
+    },
+
+  nationalSong: {
+      title: "Lagu Negaraku",
+      type: "youtube",
+      url: "https://www.youtube.com/embed/iHQIr9YhXLg?autoplay=1&rel=0"
+    }
+};
+
+// Supported types:
+// pdf, slides, audio, video, youtube
+// Google Slides: use a published/embed URL.
+// PDF: use a URL that allows embedding.
+// Audio/video: use a direct .mp3, .mp4 or compatible media URL.
+
+// ==================================================
+// 3. AUTOMATIC SLIDES
+// ==================================================
+
+let messageIndex = 0;
+let hadithIndex = 0;
+
+function renderMessage() {
+  const item = messages[messageIndex];
+
+  document.getElementById("messageSlide").innerHTML = `
+    <div class="slide-label">${item.label}</div>
+    <div class="slide-title">${item.title}</div>
+    <div class="slide-description">${item.description}</div>
+  `;
+
+  renderDots("messageDots", messages.length, messageIndex);
+}
+
+function renderHadith() {
+  const item = hadiths[hadithIndex];
+
+  document.getElementById("hadithSlide").innerHTML = `
+    <div class="hadith-arabic">${item.arabic}</div>
+    <div class="hadith-translation">${item.translation}</div>
+    <div class="hadith-ref">${item.reference}</div>
+  `;
+
+  renderDots("hadithDots", hadiths.length, hadithIndex);
+}
+
+function renderDots(id, count, active) {
+  document.getElementById(id).innerHTML =
+    Array.from({ length: count }, (_, i) =>
+      `<span class="${i === active ? "active" : ""}"></span>`
+    ).join("");
+}
+
+function renderRankings() {
+  const highest = Math.max(...rankings.map(x => x.score), 1);
+
+  document.getElementById("rankingList").innerHTML =
+    rankings.map((item, i) => `
+      <div>
+        <div class="rank-row">
+          <span class="rank-number">${i + 1}</span>
+          <span class="rank-name">${item.name}</span>
+          <span class="rank-points">${item.score}</span>
+        </div>
+        <div class="bar">
+          <span style="width:${item.score / highest * 100}%"></span>
+        </div>
+      </div>
+    `).join("");
+}
+
+function renderDiscipline() {
+  const max = Math.max(...discipline.map(x => x.count), 1);
+  const total = discipline.reduce((sum, x) => sum + x.count, 0);
+
+  document.getElementById("disciplineList").innerHTML =
+    discipline.map(item => `
+      <div class="discipline-item">
+        <span>${item.name}</span>
+        <strong>${item.count}</strong>
+        <div class="bar">
+          <span style="width:${item.count / max * 100}%"></span>
+        </div>
+      </div>
+    `).join("");
+
+  document.getElementById("totalDiscipline").textContent =
+    `JUMLAH: ${total}`;
+}
+
+function updateClock() {
+  const now = new Date();
+
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("ms-MY", { hour12: false });
+
+  document.getElementById("date").textContent =
+    now.toLocaleDateString("ms-MY", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+}
+
+renderMessage();
+renderHadith();
+renderRankings();
+renderDiscipline();
+updateClock();
+
+setInterval(updateClock, 1000);
+
+// Change slides every 12 seconds.
+setInterval(() => {
+  messageIndex = (messageIndex + 1) % messages.length;
+  renderMessage();
+}, 12000);
+
+setInterval(() => {
+  hadithIndex = (hadithIndex + 1) % hadiths.length;
+  renderHadith();
+}, 12000);
+
+// ==================================================
+// 4. MEDIA VIEWER
+// Opens inside this page, never a new browser tab.
+// ==================================================
+
+function openMedia(key) {
+  const media = mediaFiles[key];
+
+  document.getElementById("viewerTitle").textContent = media.title;
+
+  const body = document.getElementById("viewerBody");
+  body.replaceChildren();
+
+  document.getElementById("viewer").classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  if (!media.url) {
+    body.innerHTML = `
+      <div class="media-fallback">
+        <i data-lucide="file-video"
+           style="width:52px;height:52px;color:#c4b5fd"></i>
+        <h2>${media.title}</h2>
+        <p>Media belum dimasukkan.</p>
+        <p>Buka bahagian <b>MEDIA SETTINGS</b> dalam kod HTML,
+        kemudian masukkan URL PDF, slide, audio atau video anda.</p>
+      </div>
+    `;
+    lucide.createIcons();
+    return;
+  }
+
+  let element;
+
+  if (media.type === "audio") {
+    element = document.createElement("audio");
+    element.controls = true;
+    element.autoplay = true;
+    element.src = media.url;
+    element.style.width = "min(700px, 100%)";
+
+  } else if (media.type === "video") {
+    element = document.createElement("video");
+    element.controls = true;
+    element.autoplay = true;
+    element.src = media.url;
+
+  } else {
+    element = document.createElement("iframe");
+    element.src = media.url;
+    element.title = media.title;
+    element.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+    element.allowFullscreen = true;
+  }
+
+  body.appendChild(element);
+}
+
+function closeMedia() {
+  document.getElementById("viewer").classList.remove("show");
+  document.getElementById("viewerBody").replaceChildren();
+  document.body.style.overflow = "";
+}
+
+// ESC key closes the viewer.
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeMedia();
+});
+
+lucide.createIcons();
+</script>
+</body>
+</html>
