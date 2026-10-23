@@ -68,7 +68,7 @@ button { font: inherit; }
 
 .eyebrow {
   color: #d8b4fe;
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 3px;
   margin-bottom: 7px;
@@ -76,7 +76,7 @@ button { font: inherit; }
 
 h1 {
   margin: 0;
-  font-size: clamp(24px, 3vw, 38px);
+  font-size: clamp(54px, 3vw, 38px);
   letter-spacing: -.8px;
 }
 
@@ -116,7 +116,7 @@ h1 {
 }
 
 .section-heading h2 {
-  font-size: 16px;
+  font-size: 20x;
   margin: 0;
   letter-spacing: .3px;
 }
@@ -204,7 +204,7 @@ h1 {
 .iconbox svg { width: 21px; height: 21px; }
 
 .card-title {
-  font-size: 15px;
+  font-size: 25px;
   font-weight: 750;
 }
 
@@ -214,10 +214,27 @@ h1 {
   margin-top: 5px;
 }
 
+
 .slide-content {
   min-height: 94px;
-  animation: fadeIn .45s ease;
+  animation: none;
 }
+
+.slide-content.animate-in {
+  animation: slideInRight 0.65s ease both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(45px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 
 .slide-label {
   font-size: 10px;
@@ -236,7 +253,7 @@ h1 {
 }
 
 .slide-description {
-  font-size: 13px;
+  font-size: 20px;
   line-height: 1.7;
   color: #ddd6ef;
 }
@@ -345,7 +362,7 @@ h1 {
 
 .hadith-arabic {
   font-family: "Traditional Arabic", "Times New Roman", serif;
-  font-size: clamp(21px, 2.5vw, 29px);
+  font-size: clamp(48px, 2.5vw, 29px);
   text-align: right;
   direction: rtl;
   line-height: 1.9;
@@ -355,7 +372,7 @@ h1 {
 
 .hadith-translation {
   color: #eee6fa;
-  font-size: 13px;
+  font-size: 20px;
   line-height: 1.8;
 }
 
@@ -555,6 +572,15 @@ h1 {
   .clockbox { display: none; }
   .slide-title { font-size: 20px; }
 }
+
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
 </style>
 </head>
 
@@ -563,11 +589,18 @@ h1 {
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><i data-lucide="graduation-cap"></i></div>
+      
+        <div class="logo">
+          <img
+            src="https://raw.githubusercontent.com/julf95/classroom/main/Logo%20Raudhah.png"
+            alt="Logo SR Ar Raudhah"
+          >
+        </div>
+
       <div>
         <div class="eyebrow">PAPARAN MAKLUMAT SEKOLAH</div>
         <h1>Dashboard <span style="color:#d8b4fe">SR Ar Raudhah</span></h1>
-        <div class="subtitle">Membina Generasi Berilmu, Beradab dan Berakhlak</div>
+        <div class="subtitle">Membina Generasi Berilmu, Beramal dan Berakhlak</div>
       </div>
     </div>
 
@@ -593,7 +626,7 @@ h1 {
       <div class="card-head">
         <div class="iconbox"><i data-lucide="message-circle"></i></div>
         <div>
-          <div class="card-title">Pesanan Guru Minggu Ini</div>
+          <div class="card-title">Pengumuman</div>
           <div class="card-subtitle">Peringatan untuk warga sekolah</div>
         </div>
       </div>
@@ -603,45 +636,7 @@ h1 {
         <span class="small-label">PESANAN MINGGUAN</span>
       </div>
     </section>
-
-    <!-- RANKING KELAS -->
-    <section class="card"
-      style="--accent:#fcd34d;--glow:#f59e0b;--iconbg:#f59e0b22">
-      <div class="card-head">
-        <div class="iconbox" style="color:#fcd34d;background:#f59e0b22">
-          <i data-lucide="trophy"></i>
-        </div>
-        <div>
-          <div class="card-title">Ranking Kelas Terbaik</div>
-          <div class="card-subtitle">Contoh skor kebersihan dan disiplin</div>
-        </div>
-      </div>
-      <div class="ranking-list" id="rankingList"></div>
-      <div class="slide-footer">
-        <span class="small-label">CONTOH DATA · BOLEH DIUBAH</span>
-        <span class="small-label">TOP 3</span>
-      </div>
-    </section>
-
-    <!-- DISIPLIN -->
-    <section class="card"
-      style="--accent:#f0abfc;--glow:#d946ef;--iconbg:#d946ef22">
-      <div class="card-head">
-        <div class="iconbox" style="color:#f0abfc;background:#d946ef22">
-          <i data-lucide="clipboard-list"></i>
-        </div>
-        <div>
-          <div class="card-title">Rekod Disiplin</div>
-          <div class="card-subtitle">Jumlah rekod mengikut jenis</div>
-        </div>
-      </div>
-      <div id="disciplineList" class="discipline-list"></div>
-      <div class="slide-footer">
-        <span class="small-label">CONTOH DATA SAHAJA</span>
-        <span class="small-label" id="totalDiscipline"></span>
-      </div>
-    </section>
-
+    
     <!-- HADIS -->
     <section class="card"
       style="--accent:#86efac;--glow:#10b981;--iconbg:#10b98122">
@@ -660,6 +655,46 @@ h1 {
         <span class="small-label">PENGISIAN ROHANI</span>
       </div>
     </section>
+
+    <!-- RANKING KELAS -->
+    <section class="card"
+      style="--accent:#fcd34d;--glow:#f59e0b;--iconbg:#f59e0b22">
+      <div class="card-head">
+        <div class="iconbox" style="color:#fcd34d;background:#f59e0b22">
+          <i data-lucide="trophy"></i>
+        </div>
+        <div>
+          <div class="card-title">Ranking Kelas Terbaik</div>
+          <div class="card-subtitle">Contoh skor kebersihan dan disiplin</div>
+        </div>
+      </div>
+      <div class="ranking-list" id="rankingList"></div>
+      <div class="slide-footer">
+        <span class="small-label">AKAN DIKEMASKINI</span>
+        <span class="small-label">TOP 3</span>
+      </div>
+    </section>
+
+    <!-- DISIPLIN -->
+    <section class="card"
+      style="--accent:#f0abfc;--glow:#d946ef;--iconbg:#d946ef22">
+      <div class="card-head">
+        <div class="iconbox" style="color:#f0abfc;background:#d946ef22">
+          <i data-lucide="clipboard-list"></i>
+        </div>
+        <div>
+          <div class="card-title">Rekod Disiplin</div>
+          <div class="card-subtitle">Jumlah rekod mengikut jenis</div>
+        </div>
+      </div>
+      <div id="disciplineList" class="discipline-list"></div>
+      <div class="slide-footer">
+        <span class="small-label">AKAN DIKEMASKINI</span>
+        <span class="small-label" id="totalDiscipline"></span>
+      </div>
+    </section>
+
+    
 
   </main>
 
@@ -716,7 +751,7 @@ h1 {
 
   <footer class="footer">
     <span>© SR AR RAUDHAH · DASHBOARD SEKOLAH</span>
-    <span>BERILMU · BERADAB · BERAMAL</span>
+    <span>BERILMU · BERAMAL · BERAKHLAK</span>
   </footer>
 </div>
 
@@ -743,38 +778,33 @@ h1 {
 const messages = [
   {
     label: "PESANAN 01",
-    title: "Mulakan hari dengan Bismillah",
-    description: "Niatkan setiap usaha untuk mencari ilmu dan mendapat keredaan Allah."
+    title: "🚀Minggu STEM 2026 akan diadakan selepas Ujian UASA.",
+    description: "Sila berhubung dengan guru kelas tentang acara STEM yang dipertandingkan."
   },
   {
     label: "PESANAN 02",
-    title: "Adab mendahului ilmu",
-    description: "Hormati guru, sayangi rakan dan jagalah tutur kata di mana sahaja."
+    title: "🧑‍🏫Adab mendahului ilmu",
+    description: "Hormati guru, sayangi rakan dan jagalah adab di mana sahaja."
   },
   {
     label: "PESANAN 03",
-    title: "Jaga kebersihan sekolah",
-    description: "Buang sampah ke dalam tong dan pastikan kelas sentiasa kemas."
+    title: "📱Perekodan masalah disiplin sudah dijalankan melalui Sistem e-Disiplin bermula Oktober 2026",
+    description: "Ibubapa akan dimaklumkan atas setiap disiplin yang dicatatkan."
   },
   {
     label: "PESANAN 04",
-    title: "Solat tanggungjawab kita",
-    description: "Jaga solat pada waktunya dan jadikan al-Quran teman kehidupan."
+    title: "📝Pelaksanaan Ujian Akhir Sesi Akademik 2026 pada 26 Okt - 2 Nov 2026",
+    description: "Sila ulangkaji dan buat persediaan untuk menduduki ujian"
   }
 ];
 
 const rankings = [
-  { name: "Tahun 6 Bestari", score: 96 },
-  { name: "Tahun 5 Bestari", score: 91 },
-  { name: "Tahun 4 Bestari", score: 87 }
+  
 ];
 
 // Contoh sahaja. Tukar kepada jumlah sebenar apabila bersedia.
 const discipline = [
-  { name: "Tidak mematuhi arahan", count: 8 },
-  { name: "Tidak sopan", count: 5 },
-  { name: "Tidak menjaga kebersihan", count: 4 },
-  { name: "Mengganggu rakan", count: 3 }
+  
 ];
 
 // Pastikan petikan dan rujukan disemak sebelum paparan rasmi.
@@ -842,6 +872,14 @@ const mediaFiles = {
 let messageIndex = 0;
 let hadithIndex = 0;
 
+
+function animateSlide(element) {
+  element.classList.remove("animate-in");
+  void element.offsetWidth;
+  element.classList.add("animate-in");
+}
+
+
 function renderMessage() {
   const item = messages[messageIndex];
 
@@ -850,6 +888,8 @@ function renderMessage() {
     <div class="slide-title">${item.title}</div>
     <div class="slide-description">${item.description}</div>
   `;
+  
+  animateSlide(document.getElementById("messageSlide"));
 
   renderDots("messageDots", messages.length, messageIndex);
 }
@@ -862,6 +902,8 @@ function renderHadith() {
     <div class="hadith-translation">${item.translation}</div>
     <div class="hadith-ref">${item.reference}</div>
   `;
+  
+  animateSlide(document.getElementById("hadithSlide"));
 
   renderDots("hadithDots", hadiths.length, hadithIndex);
 }
@@ -937,12 +979,12 @@ setInterval(updateClock, 1000);
 setInterval(() => {
   messageIndex = (messageIndex + 1) % messages.length;
   renderMessage();
-}, 12000);
+}, 5000);
 
 setInterval(() => {
   hadithIndex = (hadithIndex + 1) % hadiths.length;
   renderHadith();
-}, 12000);
+}, 5000);
 
 // ==================================================
 // 4. MEDIA VIEWER
