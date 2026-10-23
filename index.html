@@ -107,6 +107,14 @@ h1 {
   margin-top: 5px;
 }
 
+.hijri-date {
+  color: #f0abfc;
+  font-size: 14px;
+  font-weight: 800;
+  margin-top: 5px;
+  letter-spacing: .3px;
+}
+
 .section-heading {
   display: flex;
   align-items: center;
@@ -606,6 +614,9 @@ h1 {
 
     <div class="clockbox">
       <div class="clock" id="clock">00:00:00</div>
+      <div class="hijri-date" id="hijriDate">
+        Memuatkan tarikh Hijrah...
+      </div>
       <div class="date" id="date"></div>
     </div>
   </header>
@@ -665,7 +676,7 @@ h1 {
         </div>
         <div>
           <div class="card-title">Ranking Kelas Terbaik</div>
-          <div class="card-subtitle">Contoh skor kebersihan dan disiplin</div>
+          <div class="card-subtitle"> Kebersihan dan disiplin</div>
         </div>
       </div>
       <div class="ranking-list" id="rankingList"></div>
@@ -702,7 +713,7 @@ h1 {
   <section class="media-section">
     <div class="section-heading" style="margin-top:0">
       <div>
-        <h2>Bahan Paparan Sekolah</h2>
+        <h2>🖥️Bahan Paparan Sekolah</h2>
         <p>Klik untuk paparkan bahan pada skrin ini</p>
       </div>
       <i data-lucide="monitor-play" style="color:#d8b4fe"></i>
@@ -746,6 +757,19 @@ h1 {
         </span>
         <i class="open-icon" data-lucide="chevron-right"></i>
       </button>
+      
+      
+        <button class="media-btn" onclick="openMedia('hadis40')">
+          <span class="media-icon">
+            <i data-lucide="book-open"></i>
+          </span>
+          <span>
+            <div class="media-name">Hadis 40 Imam An Nawawi</div>
+            <div class="media-desc">Koleksi hadis pilihan</div>
+          </span>
+          <i class="open-icon" data-lucide="chevron-right"></i>
+        </button>
+
     </div>
   </section>
 
@@ -856,7 +880,15 @@ const mediaFiles = {
       title: "Lagu Negaraku",
       type: "youtube",
       url: "https://www.youtube.com/embed/iHQIr9YhXLg?autoplay=1&rel=0"
+    },
+    
+    
+    hadis40: {
+      title: "Hadis 40",
+      type: "pdf",
+      url: "https://drive.google.com/file/d/1d-5uHB-xgIHKXq8oAyQsJH-7Wa2iRFz_/preview"
     }
+
 };
 
 // Supported types:
@@ -967,13 +999,106 @@ function updateClock() {
     });
 }
 
+
+let lastHijriDateKey = "";
+
+async function updateHijriDate() {
+  const hijriElement = document.getElementById("hijriDate");
+
+  try {
+    // Gunakan tarikh Malaysia, bukan zon waktu peranti yang mungkin berbeza.
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kuala_Lumpur",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(new Date());
+
+    const getPart = type =>
+      parts.find(part => part.type === type).value;
+
+    const year = getPart("year");
+    const dateKey =
+      `${year}-${getPart("month")}-${getPart("day")}`;
+
+    // Tidak perlu memuatkan semula jika tarikh belum berubah.
+    if (dateKey === lastHijriDateKey) return;
+
+    const response = await fetch(
+      `https://sajadah.org/api/v1/times/my/sbh01/${year}.json`
+    );
+
+    if (!response.ok) {
+      throw new Error("Data takwim tidak tersedia");
+    }
+
+    const data = await response.json();
+
+    const dateIndex = data.fields.indexOf("date");
+    const hijriIndex = data.fields.indexOf("hijri");
+
+    if (dateIndex === -1 || hijriIndex === -1) {
+      throw new Error("Format data takwim tidak dikenali");
+    }
+
+    const today = data.days.find(
+      row => row[dateIndex] === dateKey
+    );
+
+    if (!today || !today[hijriIndex]) {
+      throw new Error("Tarikh Hijrah tidak ditemui");
+    }
+
+    const hijriParts = today[hijriIndex].split("-");
+
+    const hijriMonths = [
+      "Muharam",
+      "Safar",
+      "Rabiulawal",
+      "Rabiulakhir",
+      "Jamadilawal",
+      "Jamadilakhir",
+      "Rejab",
+      "Syaaban",
+      "Ramadan",
+      "Syawal",
+      "Zulkaedah",
+      "Zulhijjah"
+    ];
+    
+    const hijriYear = hijriParts[0];
+    const hijriMonth = Number(hijriParts[1]);
+    const hijriDay = Number(hijriParts[2]);
+    
+    if (hijriMonth < 1 || hijriMonth > 12) {
+      throw new Error("Format tarikh Hijrah tidak sah");
+    }
+    
+    hijriElement.textContent =
+      `${hijriDay} ${hijriMonths[hijriMonth - 1]} ${hijriYear}H`;
+    
+    lastHijriDateKey = dateKey;
+    lastHijriDateKey = dateKey;
+
+  } catch (error) {
+    console.error("Gagal memuatkan tarikh Hijrah:", error);
+
+    // Jangan paparkan tarikh anggaran sebagai tarikh rasmi.
+    hijriElement.textContent =
+      "Tarikh Hijrah tidak tersedia";
+  }
+}
+
+
 renderMessage();
 renderHadith();
 renderRankings();
 renderDiscipline();
 updateClock();
+updateHijriDate();
 
 setInterval(updateClock, 1000);
+setInterval(updateHijriDate, 1000);
 
 // Change slides every 12 seconds.
 setInterval(() => {
